@@ -1,5 +1,7 @@
 # PageRank from first principles
 
+[![CI](https://github.com/Wei-Chen-7/pagerank/actions/workflows/ci.yml/badge.svg)](https://github.com/Wei-Chen-7/pagerank/actions/workflows/ci.yml)
+
 A small, honest implementation of **PageRank** — built from a graph's adjacency
 structure up, not by calling a library's `pagerank()`. It constructs the Google
 matrix, solves for the stationary distribution by power iteration, validates that
@@ -220,9 +222,14 @@ around:
    with dangling nodes.
 3. **A tiny hand-computable graph yields the expected order** (`C > A > B > D`).
 
-It also checks the sparse solver against the dense one, the `DiGraph` container,
-personalization, weighted edges, input validation, and the headline
-in-degree-vs-PageRank disagreement.
+As an extra independent check, `tests/test_reference.py` cross-validates the
+from-scratch result against **NetworkX's** `pagerank` (used only as a test-time
+oracle, never in the package) — agreement to ~1e-8 across dangling nodes,
+weighted edges, a range of damping factors, and personalization.
+
+The suite also checks the sparse solver against the dense one, the `DiGraph`
+container, input validation, and the headline in-degree-vs-PageRank
+disagreement — 70 tests in all.
 
 ## Honest caveats
 
