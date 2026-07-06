@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pagerank"
+version = "0.1.0"
+description = "PageRank from first principles: Google matrix, power iteration, sparse and personalized variants."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "PageRank from scratch" }]
+keywords = ["pagerank", "graph", "centrality", "markov-chain", "power-iteration", "linear-algebra"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+# Needed only for the examples/ scripts (drawing and layout).
+examples = ["matplotlib>=3.7", "networkx>=3.0"]
+# Everything needed to run the test suite.
+dev = ["pytest>=7.0", "matplotlib>=3.7", "networkx>=3.0"]
+
+[tool.setuptools.packages.find]
+include = ["pagerank*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
