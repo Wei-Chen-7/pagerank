@@ -129,6 +129,37 @@ Node `C` wins because everyone (A, B, D) links to it and it trades weight back
 and forth with `A`; `D` loses because nothing links to it, so it survives only on
 teleportation.
 
+## Command line
+
+Installing the package also installs a `pagerank` console script that ranks an
+edge-list file (or `python -m pagerank`, no install needed):
+
+```console
+$ pagerank examples/web_of_influence.edgelist --top 4
+# 11 nodes, 18 edges, damping 0.85
+rank  node           score
+----  --------  ----------
+   1  guru        0.286026
+   2  insight     0.278260
+   3  megablog    0.154608
+   4  user01      0.035138
+      ... (7 more)
+```
+
+The edge list is two or three whitespace-/comma-separated columns
+(`source target [weight]`), with `#` comments. Useful flags: `-d/--damping`,
+`-n/--top`, `--sparse` (SciPy solver for large graphs), `--bias NODE[=WEIGHT]`
+(personalized teleport, repeatable), `--format json`, and `-` to read from
+stdin.
+
+```console
+$ pagerank examples/web_of_influence.edgelist --bias megablog --format json --top 2
+[
+  { "node": "megablog", "score": 0.3887... },
+  { "node": "guru",     "score": 0.3304... }
+]
+```
+
 ## Why it beats counting in-links
 
 Counting in-links (in-degree centrality) treats every endorsement as equal. It
@@ -196,7 +227,8 @@ pagerank/
 ├── core.py        # Google matrix, power iteration, eigen reference (dense, NumPy)
 ├── sparse.py      # same math on SciPy CSR matrices, for large graphs
 ├── graph.py       # DiGraph: named nodes, edge lists, adjacency views, ranking
-└── datasets.py    # tiny hand-computable graph, the influence graph, scale-free generator
+├── datasets.py    # tiny hand-computable graph, the influence graph, scale-free generator
+└── cli.py         # `pagerank` console script: rank an edge-list file
 tests/             # pytest suite (see below)
 examples/          # scripts that print results and save figures into figures/
 figures/           # generated PNGs (committed, embedded above)
@@ -228,8 +260,8 @@ oracle, never in the package) — agreement to ~1e-8 across dangling nodes,
 weighted edges, a range of damping factors, and personalization.
 
 The suite also checks the sparse solver against the dense one, the `DiGraph`
-container, input validation, and the headline in-degree-vs-PageRank
-disagreement — 70 tests in all.
+container, the command-line interface, input validation, and the headline
+in-degree-vs-PageRank disagreement — 82 tests in all.
 
 ## Honest caveats
 

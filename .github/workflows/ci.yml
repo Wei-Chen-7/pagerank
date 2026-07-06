@@ -30,6 +30,11 @@ jobs:
       - name: Run test suite
         run: pytest -q
 
+      - name: Smoke-test the CLI
+        run: |
+          pagerank examples/web_of_influence.edgelist --top 3
+          python -m pagerank examples/web_of_influence.edgelist --sparse --format json --top 3
+
       - name: Smoke-test the examples
         run: |
           python examples/visualize_graph.py
