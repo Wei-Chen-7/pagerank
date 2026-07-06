@@ -206,6 +206,33 @@ factor, not the size.
 
 ![Power iteration converges geometrically](figures/convergence.png)
 
+## The damping factor, in depth
+
+Damping is not a free parameter you tune for accuracy — it is a genuine
+trade-off, and `examples/convergence_study.py` makes both sides of it concrete.
+
+![The damping factor: one knob, two effects](figures/damping_study.png)
+
+The convergence rate of power iteration is governed by the **subdominant
+eigenvalue** `|λ₂|` of the Google matrix — the second-largest after the `1` whose
+eigenvector is the PageRank vector. The residual shrinks by about `|λ₂|` per step,
+and for the Google matrix
+
+```
+|λ₂| ≤ d ,
+```
+
+so iterations-to-tolerance scale like `log(tol) / log(d)` and blow up as `d → 1`.
+`subdominant_eigenvalue()` computes `|λ₂|` directly, and the test suite checks
+both that the bound holds and that the *observed* decay rate equals `|λ₂|` to
+within a few percent — theory and code kept honest against each other.
+
+The same knob also reshapes the answer. At `d = 0` the surfer never follows a
+link, so every page gets the uniform `1/n`. As `d` rises, link structure asserts
+itself: on the example graph `insight` only overtakes `megablog` once `d ≈ 0.44`.
+Higher `d` is more faithful to the link graph but slower to converge; the
+conventional `0.85` is a compromise, not a constant of nature.
+
 ## Personalized (topic-biased) PageRank
 
 Change the teleport distribution `v` from uniform to a favorite node (or topic
@@ -235,7 +262,8 @@ figures/           # generated PNGs (committed, embedded above)
 ```
 
 Public API: `pagerank`, `power_iteration`, `pagerank_eig`, `google_matrix`,
-`hyperlink_matrix`, `pagerank_sparse`, `DiGraph`, and `datasets`.
+`hyperlink_matrix`, `subdominant_eigenvalue`, `pagerank_sparse`, `DiGraph`, and
+`datasets`.
 
 ## Tests
 
@@ -259,9 +287,10 @@ from-scratch result against **NetworkX's** `pagerank` (used only as a test-time
 oracle, never in the package) — agreement to ~1e-8 across dangling nodes,
 weighted edges, a range of damping factors, and personalization.
 
-The suite also checks the sparse solver against the dense one, the `DiGraph`
-container, the command-line interface, input validation, and the headline
-in-degree-vs-PageRank disagreement — 82 tests in all.
+The suite also checks the sparse solver against the dense one, the spectral
+theory behind convergence (`|λ₂| ≤ d`, and the observed rate equals `|λ₂|`), the
+`DiGraph` container, the command-line interface, input validation, and the
+headline in-degree-vs-PageRank disagreement — 108 tests in all.
 
 ## Honest caveats
 

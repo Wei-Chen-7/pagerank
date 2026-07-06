@@ -54,6 +54,7 @@ __all__ = [
     "power_iteration",
     "pagerank",
     "pagerank_eig",
+    "subdominant_eigenvalue",
 ]
 
 
@@ -232,3 +233,20 @@ def pagerank_eig(adjacency, damping: float = 0.85, personalization=None) -> np.n
     if total == 0:
         raise RuntimeError("degenerate dominant eigenvector")
     return vec / total
+
+
+def subdominant_eigenvalue(adjacency, damping: float = 0.85, personalization=None) -> float:
+    """Modulus of the second-largest eigenvalue of the Google matrix, ``|λ₂|``.
+
+    The largest eigenvalue is always 1 (its eigenvector is the PageRank vector).
+    The *next* one governs how fast power iteration converges: the error shrinks
+    by roughly this factor per step, so iterations-to-tolerance scale like
+    ``log(tol) / log(|λ₂|)``.  For the Google matrix ``|λ₂| ≤ damping``, which is
+    exactly why the damping factor is the knob that trades ranking fidelity
+    against convergence speed.  Dense ``O(n³)``; for study and testing only.
+    """
+    g = google_matrix(adjacency, damping=damping, personalization=personalization)
+    if g.shape[0] < 2:
+        return 0.0
+    magnitudes = np.sort(np.abs(np.linalg.eigvals(g)))
+    return float(magnitudes[-2])

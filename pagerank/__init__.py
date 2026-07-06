@@ -13,6 +13,7 @@ from .core import (
     pagerank,
     pagerank_eig,
     power_iteration,
+    subdominant_eigenvalue,
 )
 from .graph import DiGraph
 from .sparse import pagerank_sparse
@@ -27,6 +28,7 @@ __all__ = [
     "power_iteration",
     "pagerank",
     "pagerank_eig",
+    "subdominant_eigenvalue",
     "pagerank_sparse",
     "DiGraph",
     "datasets",

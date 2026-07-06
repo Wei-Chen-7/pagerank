@@ -40,3 +40,4 @@ jobs:
           python examples/visualize_graph.py
           python examples/indegree_vs_pagerank.py
           python examples/personalized_pagerank.py
+          python examples/convergence_study.py
