@@ -10,12 +10,10 @@ from __future__ import annotations
 import time
 
 import numpy as np
+from _common import ACCENT, GRID, MUTED, apply_style, figure_path, plt
 
-from _common import ACCENT, GRID, MUTED, apply_style, figure_path
 from pagerank import datasets
 from pagerank.sparse import pagerank_sparse
-
-import matplotlib.pyplot as plt
 
 
 def main() -> None:
@@ -54,11 +52,23 @@ def main() -> None:
 
     # Convergence plot for the largest graph.
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.semilogy(range(1, len(residual_curve) + 1), residual_curve,
-                color=ACCENT, marker="o", markersize=4, linewidth=1.8)
+    ax.semilogy(
+        range(1, len(residual_curve) + 1),
+        residual_curve,
+        color=ACCENT,
+        marker="o",
+        markersize=4,
+        linewidth=1.8,
+    )
     ax.axhline(1e-10, color=MUTED, linestyle="--", linewidth=1)
-    ax.annotate("tolerance 1e-10", (1, 1e-10), textcoords="offset points",
-                xytext=(4, 6), color=MUTED, fontsize=9)
+    ax.annotate(
+        "tolerance 1e-10",
+        (1, 1e-10),
+        textcoords="offset points",
+        xytext=(4, 6),
+        color=MUTED,
+        fontsize=9,
+    )
     ax.set_xlabel("iteration")
     ax.set_ylabel("L1 residual  ‖rₖ₊₁ − rₖ‖₁")
     ax.grid(True, which="both", color=GRID, linewidth=0.6)
@@ -66,7 +76,8 @@ def main() -> None:
         f"Power iteration converges geometrically\n"
         f"{sizes[-1]:,}-node scale-free graph, damping 0.85 — "
         f"{len(residual_curve)} iterations to 1e-10",
-        fontsize=12, loc="left",
+        fontsize=12,
+        loc="left",
     )
     fig.tight_layout()
     out = figure_path("convergence.png")

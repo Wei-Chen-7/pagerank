@@ -63,8 +63,7 @@ def pagerank_sparse(
     r = v.copy()
     residuals: list[float] = []
     converged = False
-    iterations = 0
-    for iterations in range(1, max_iter + 1):
+    for _ in range(max_iter):
         dangling_mass = r[dangling].sum()
         contrib = a_t @ (r * inv_out)
         r_new = damping * contrib + (damping * dangling_mass + (1.0 - damping)) * v
@@ -76,4 +75,6 @@ def pagerank_sparse(
             break
 
     r = r / r.sum()
-    return PageRankResult(scores=r, iterations=iterations, converged=converged, residuals=residuals)
+    return PageRankResult(
+        scores=r, iterations=len(residuals), converged=converged, residuals=residuals
+    )

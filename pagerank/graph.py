@@ -8,12 +8,12 @@ to the dense or sparse PageRank routines.
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Hashable, Iterable
+from collections.abc import Hashable, Iterable
 
 import numpy as np
 import scipy.sparse as sp
 
-from .core import PageRankResult, power_iteration
+from .core import power_iteration
 from .sparse import pagerank_sparse
 
 __all__ = ["DiGraph"]
@@ -48,7 +48,7 @@ class DiGraph:
         cls,
         edges: Iterable[tuple],
         nodes: Iterable[Hashable] | None = None,
-    ) -> "DiGraph":
+    ) -> DiGraph:
         """Build a graph from ``(source, target)`` or ``(source, target, weight)`` tuples.
 
         ``nodes`` optionally seeds isolated or ordering-defining nodes first.
@@ -81,15 +81,15 @@ class DiGraph:
 
     def in_degree(self) -> dict[Hashable, float]:
         """Weighted in-degree per node label."""
-        deg = {node: 0.0 for node in self._nodes}
-        for i, targets in self._out.items():
+        deg = dict.fromkeys(self._nodes, 0.0)
+        for targets in self._out.values():
             for j, w in targets.items():
                 deg[self._nodes[j]] += w
         return deg
 
     def out_degree(self) -> dict[Hashable, float]:
         """Weighted out-degree per node label."""
-        deg = {node: 0.0 for node in self._nodes}
+        deg = dict.fromkeys(self._nodes, 0.0)
         for i, targets in self._out.items():
             deg[self._nodes[i]] = sum(targets.values())
         return deg

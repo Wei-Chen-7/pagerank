@@ -183,8 +183,7 @@ def power_iteration(
 
     residuals: list[float] = []
     converged = False
-    iterations = 0
-    for iterations in range(1, max_iter + 1):
+    for _ in range(max_iter):
         dangling_mass = r[dangling].sum()
         r_new = damping * (h_t @ r) + (damping * dangling_mass + (1.0 - damping)) * v
         residual = float(np.abs(r_new - r).sum())
@@ -195,7 +194,9 @@ def power_iteration(
             break
 
     r = r / r.sum()  # guard against floating-point drift
-    return PageRankResult(scores=r, iterations=iterations, converged=converged, residuals=residuals)
+    return PageRankResult(
+        scores=r, iterations=len(residuals), converged=converged, residuals=residuals
+    )
 
 
 def pagerank(

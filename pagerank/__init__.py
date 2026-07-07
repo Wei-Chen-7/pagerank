@@ -6,6 +6,7 @@ handful of example graphs.  Nothing here calls a library's ``pagerank()`` -- the
 algorithm is built from the adjacency structure up.
 """
 
+from . import datasets
 from .core import (
     PageRankResult,
     google_matrix,
@@ -17,7 +18,6 @@ from .core import (
 )
 from .graph import DiGraph
 from .sparse import pagerank_sparse
-from . import datasets
 
 __version__ = "0.1.0"
 

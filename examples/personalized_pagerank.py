@@ -10,11 +10,9 @@ personalized runs on the same graph.
 from __future__ import annotations
 
 import numpy as np
+from _common import ACCENT, MUTED, WARN, apply_style, figure_path, plt
 
-from _common import ACCENT, MUTED, WARN, apply_style, figure_path
 from pagerank import datasets
-
-import matplotlib.pyplot as plt
 
 
 def main() -> None:
@@ -36,8 +34,15 @@ def main() -> None:
     width = 0.26
     fig, ax = plt.subplots(figsize=(10, 5.5))
     for offset, (label, scores, color) in zip((-1, 0, 1), series):
-        ax.bar(x + offset * width, [scores[n] for n in nodes], width,
-               label=label, color=color, edgecolor="white", linewidth=0.5)
+        ax.bar(
+            x + offset * width,
+            [scores[n] for n in nodes],
+            width,
+            label=label,
+            color=color,
+            edgecolor="white",
+            linewidth=0.5,
+        )
 
     ax.set_xticks(x)
     ax.set_xticklabels(nodes, rotation=45, ha="right", fontsize=9)
@@ -47,7 +52,8 @@ def main() -> None:
         "Personalized PageRank tilts the ranking toward the teleport target\n"
         "biasing toward 'user01' lifts user01 and its neighbors; "
         "biasing toward 'megablog' lifts megablog and the guru it links to",
-        fontsize=12, loc="left",
+        fontsize=12,
+        loc="left",
     )
     fig.tight_layout()
     out = figure_path("personalized.png")

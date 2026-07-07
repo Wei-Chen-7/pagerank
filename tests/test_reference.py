@@ -27,8 +27,7 @@ def _nx_digraph(adjacency: np.ndarray):
 
 
 def _nx_pagerank(adjacency, **kwargs):
-    ref = nx.pagerank(_nx_digraph(adjacency), weight="weight", tol=1e-13,
-                      max_iter=2000, **kwargs)
+    ref = nx.pagerank(_nx_digraph(adjacency), weight="weight", tol=1e-13, max_iter=2000, **kwargs)
     return np.array([ref[i] for i in range(adjacency.shape[0])])
 
 

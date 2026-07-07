@@ -20,12 +20,10 @@ conventional compromise.
 from __future__ import annotations
 
 import numpy as np
+from _common import ACCENT, GRID, INK, MUTED, WARN, apply_style, figure_path, plt
 
-from _common import ACCENT, GRID, INK, MUTED, WARN, apply_style, figure_path
 from pagerank import datasets
 from pagerank.core import power_iteration, subdominant_eigenvalue
-
-import matplotlib.pyplot as plt
 
 
 def empirical_rate(residuals: list[float]) -> float:
@@ -55,8 +53,13 @@ def main() -> None:
     # (top-left) residual curves.
     for d, color in zip(dampings, colors):
         result = power_iteration(adjacency, damping=d, tol=1e-13, max_iter=5000)
-        ax_res.semilogy(range(1, result.iterations + 1), result.residuals,
-                        color=color, linewidth=1.8, label=f"d = {d:.2f}")
+        ax_res.semilogy(
+            range(1, result.iterations + 1),
+            result.residuals,
+            color=color,
+            linewidth=1.8,
+            label=f"d = {d:.2f}",
+        )
     ax_res.set_xlabel("iteration")
     ax_res.set_ylabel("L1 residual")
     ax_res.set_xlim(0, 160)
@@ -87,8 +90,7 @@ def main() -> None:
         iters.append(res.iterations)
     ax_iters.plot(fine, iters, color=INK, linewidth=2.0)
     ax_iters.axvline(0.85, color=WARN, linestyle=":", linewidth=1.4)
-    ax_iters.annotate("d = 0.85", (0.85, max(iters) * 0.9), color=WARN,
-                      fontsize=9, ha="right")
+    ax_iters.annotate("d = 0.85", (0.85, max(iters) * 0.9), color=WARN, fontsize=9, ha="right")
     ax_iters.set_xlabel("damping factor  d")
     ax_iters.set_ylabel("iterations to reach 1e-10")
     ax_iters.grid(True, color=GRID, linewidth=0.6)
@@ -112,11 +114,22 @@ def main() -> None:
     if cross.size:
         dc = grid[cross[0]]
         ax_rank.axvline(dc, color=GRID, linewidth=1.2)
-        ax_rank.annotate(f"insight overtakes\nmegablog (d ≈ {dc:.2f})",
-                         (dc, 0.26), fontsize=9, ha="left", color=INK)
+        ax_rank.annotate(
+            f"insight overtakes\nmegablog (d ≈ {dc:.2f})",
+            (dc, 0.26),
+            fontsize=9,
+            ha="left",
+            color=INK,
+        )
     ax_rank.axhline(1 / graph.number_of_nodes(), color=GRID, linestyle="--", linewidth=1)
-    ax_rank.annotate("uniform 1/n", (0.01, 1 / graph.number_of_nodes()),
-                     textcoords="offset points", xytext=(2, 4), color=MUTED, fontsize=8)
+    ax_rank.annotate(
+        "uniform 1/n",
+        (0.01, 1 / graph.number_of_nodes()),
+        textcoords="offset points",
+        xytext=(2, 4),
+        color=MUTED,
+        fontsize=8,
+    )
     ax_rank.set_xlabel("damping factor  d")
     ax_rank.set_ylabel("PageRank")
     ax_rank.grid(True, color=GRID, linewidth=0.6)

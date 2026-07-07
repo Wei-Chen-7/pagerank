@@ -292,6 +292,22 @@ theory behind convergence (`|λ₂| ≤ d`, and the observed rate equals `|λ₂
 `DiGraph` container, the command-line interface, input validation, and the
 headline in-degree-vs-PageRank disagreement — 108 tests in all.
 
+## Development
+
+Quality checks run in CI (a dedicated `lint` job) and can be run locally:
+
+```bash
+pip install -e .[dev]     # ruff, mypy, pytest, matplotlib, networkx
+
+ruff check .              # lint
+ruff format --check .     # formatting
+mypy                      # type-check the pagerank package
+pytest -q                 # tests
+```
+
+A [pre-commit](https://pre-commit.com) config runs the same ruff + mypy hooks on
+every commit — `pip install pre-commit && pre-commit install` to enable it.
+
 ## Honest caveats
 
 - `pagerank_eig` is a **reference for testing**, not a scalable method: it forms

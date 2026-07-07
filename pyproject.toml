@@ -28,8 +28,8 @@ pagerank = "pagerank.cli:main"
 [project.optional-dependencies]
 # Needed only for the examples/ scripts (drawing and layout).
 examples = ["matplotlib>=3.7", "networkx>=3.0"]
-# Everything needed to run the test suite.
-dev = ["pytest>=7.0", "matplotlib>=3.7", "networkx>=3.0"]
+# Everything needed to run the test suite and the quality checks.
+dev = ["pytest>=7.0", "matplotlib>=3.7", "networkx>=3.0", "ruff>=0.5", "mypy>=1.8"]
 
 [tool.setuptools.packages.find]
 include = ["pagerank*"]
@@ -37,3 +37,30 @@ include = ["pagerank*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+extend-exclude = ["figures"]
+
+[tool.ruff.lint]
+# pyflakes, pycodestyle, isort, pyupgrade, bugbear, comprehensions, simplify, naming.
+select = ["E", "W", "F", "I", "UP", "B", "C4", "SIM", "N"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pagerank"]
+
+[tool.ruff.lint.per-file-ignores]
+# Example scripts pull in shared style constants that read as "unused".
+"examples/*" = ["N806"]
+
+[tool.mypy]
+files = ["pagerank"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+
+# Third-party scientific libraries without complete type stubs.
+[[tool.mypy.overrides]]
+module = ["scipy.*", "matplotlib.*", "networkx.*"]
+ignore_missing_imports = true

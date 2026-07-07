@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt  # noqa: E402
 # A small, colorblind-safe palette reused across every figure.
 INK = "#1f2933"
 MUTED = "#7b8794"
-ACCENT = "#2f6fed"   # PageRank / "important via good links"
-WARN = "#e8710a"     # in-degree / "popular by volume"
+ACCENT = "#2f6fed"  # PageRank / "important via good links"
+WARN = "#e8710a"  # in-degree / "popular by volume"
 GRID = "#dfe3e8"
 
 FIGURES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "figures")

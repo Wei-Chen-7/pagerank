@@ -18,7 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from typing import Iterable
+from collections.abc import Iterable
 
 from .graph import DiGraph
 
@@ -80,29 +80,41 @@ def _build_parser() -> argparse.ArgumentParser:
         help="path to an edge-list file, or '-' to read from stdin",
     )
     parser.add_argument(
-        "-d", "--damping", type=float, default=0.85,
+        "-d",
+        "--damping",
+        type=float,
+        default=0.85,
         help="damping factor in [0, 1) (default: 0.85)",
     )
     parser.add_argument(
-        "-n", "--top", type=int, default=None,
+        "-n",
+        "--top",
+        type=int,
+        default=None,
         help="show only the top N nodes (default: all)",
     )
     parser.add_argument(
-        "--sparse", action="store_true",
+        "--sparse",
+        action="store_true",
         help="use the SciPy-sparse solver (preferable for large graphs)",
     )
     parser.add_argument(
-        "--bias", action="append", metavar="NODE[=WEIGHT]",
+        "--bias",
+        action="append",
+        metavar="NODE[=WEIGHT]",
         help="personalize: teleport toward NODE (repeatable; default weight 1)",
     )
     parser.add_argument(
-        "--delimiter", default=None,
+        "--delimiter",
+        default=None,
         help="field delimiter (default: any whitespace or comma)",
     )
     parser.add_argument("--tol", type=float, default=1e-10, help="convergence tolerance")
     parser.add_argument("--max-iter", type=int, default=1000, help="maximum iterations")
     parser.add_argument(
-        "--format", choices=("table", "json"), default="table",
+        "--format",
+        choices=("table", "json"),
+        default="table",
         help="output format (default: table)",
     )
     return parser
@@ -127,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.edgelist == "-":
             graph = read_edgelist(sys.stdin, delimiter=args.delimiter)
         else:
-            with open(args.edgelist, "r", encoding="utf-8") as handle:
+            with open(args.edgelist, encoding="utf-8") as handle:
                 graph = read_edgelist(handle, delimiter=args.delimiter)
 
         bias = _parse_bias(args.bias)
