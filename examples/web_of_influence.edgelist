@@ -1,0 +1,20 @@
+# web_of_influence: casual users -> megablog & guru; megablog -> guru; guru -> insight
+# format: source target
+user01 megablog
+user01 guru
+user02 megablog
+user02 guru
+user03 megablog
+user03 guru
+user04 megablog
+user04 guru
+user05 megablog
+user05 guru
+user06 megablog
+user06 guru
+user07 megablog
+user07 guru
+user08 megablog
+user08 guru
+megablog guru
+guru insight
